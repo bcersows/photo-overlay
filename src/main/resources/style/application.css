@@ -1,0 +1,25 @@
+.root {
+	colorBackground: #fcfcfc;
+	colorBc: #bc3435;
+	colorOk: GREEN;
+	colorStop: RED;
+	colorWarn: ORANGE;
+	
+	colorHeaderText: WHITE;
+	
+	-fx-font-family: "Montserrat";
+	-fx-font-size: 10pt;
+}
+
+.transparent {
+	-fx-background-color: transparent;
+}
+
+.fontAwesome {
+	-fx-font-family: "Font Awesome 5 Free";
+	-fx-font-weight: 100;
+}
+
+.drag-area {
+	-fx-background-color: rgba(255,0,0,0.2);
+}
