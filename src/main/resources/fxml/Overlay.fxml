@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
@@ -12,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<Pane styleClass="transparent" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane styleClass="bg-transparent" stylesheets="@../style/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <BorderPane fx:id="rootContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0" styleClass="transparent" stylesheets="@../style/application.css">
+      <BorderPane fx:id="rootContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0" styleClass="bg-transparent">
          <center>
-            <VBox fx:id="imageArea" alignment="CENTER" styleClass="transparent" BorderPane.alignment="CENTER">
+            <VBox fx:id="imageArea" alignment="CENTER" styleClass="bg-transparent" BorderPane.alignment="CENTER">
                <children>
                   <Label fx:id="labelNoImages" text="No images found for configured folder path!" />
                   <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#onMouseClickedOnImageView" pickOnBounds="true" preserveRatio="true" />
@@ -24,13 +25,21 @@
             </VBox>
          </center>
          <top>
-            <HBox prefHeight="20.0" spacing="10.0" styleClass="transparent" BorderPane.alignment="CENTER">
+            <HBox prefHeight="20.0" spacing="10.0" styleClass="bg-transparent" BorderPane.alignment="CENTER">
                <children>
-                  <Pane fx:id="dragBar" onMouseDragged="#onMouseDraggedEvent" onMousePressed="#onMousePressedEvent" styleClass="drag-area" HBox.hgrow="ALWAYS">
+                  <HBox fx:id="dragBar" alignment="CENTER" onMouseDragged="#onMouseDraggedEvent" onMousePressed="#onMousePressedEvent" styleClass="drag-area" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label fx:id="dragBarText" text="\\uf0b2">
+                           <styleClass>
+                              <String fx:value="fontAwesome" />
+                              <String fx:value="text-normal" />
+                           </styleClass>
+                        </Label>
+                     </children>
                      <cursor>
                         <Cursor fx:constant="MOVE" />
                      </cursor>
-                  </Pane>
+                  </HBox>
                   <Button fx:id="buttonSettings" mnemonicParsing="false" onAction="#onActionButtonSettings" text="SETTINGS" />
                   <Button fx:id="buttonClose" mnemonicParsing="false" onAction="#onActionButtonClose" text="CLOSE" />
                </children>

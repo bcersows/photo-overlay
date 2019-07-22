@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
  */
 public interface ControllerInterface {
     /** When showing a controller. **/
-    // void show();
+    void show();
 
     /** After initializing. **/
     @FXML

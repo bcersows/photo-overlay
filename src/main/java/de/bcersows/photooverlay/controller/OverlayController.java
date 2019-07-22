@@ -18,6 +18,7 @@ import com.google.inject.Inject;
 
 import de.bcersows.photooverlay.Main;
 import de.bcersows.photooverlay.OverlayConfig;
+import de.bcersows.photooverlay.ToolConstants;
 import de.bcersows.photooverlay.helper.CustomNamedThreadFactory;
 import de.bcersows.photooverlay.model.CalculatedImageSize;
 import de.bcersows.photooverlay.model.ImageInfo;
@@ -46,6 +47,8 @@ public class OverlayController implements ControllerInterface {
 
     @FXML
     private Label labelNoImages;
+    @FXML
+    private Label dragBarText;
 
     @FXML
     private VBox imageArea;
@@ -84,6 +87,11 @@ public class OverlayController implements ControllerInterface {
     public void initialize() {
         LOG.info("Init");
 
+        this.dragBarText.setText(ToolConstants.ICONS.FA_DRAG.code);
+    }
+
+    @Override
+    public void show() {
         // load the first image
         nextImage();
     }

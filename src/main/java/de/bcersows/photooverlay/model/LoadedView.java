@@ -6,6 +6,7 @@ package de.bcersows.photooverlay.model;
 import de.bcersows.photooverlay.controller.ControllerInterface;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  * @author BCE
@@ -14,6 +15,8 @@ public class LoadedView {
     private final Scene scene;
     private final Parent uiRoot;
     private final ControllerInterface controller;
+
+    private Stage stage;
 
     /**
      * @param scene
@@ -46,6 +49,21 @@ public class LoadedView {
      */
     public ControllerInterface getController() {
         return this.controller;
+    }
+
+    /**
+     * @return the stage
+     */
+    public Stage getStage() {
+        return this.stage;
+    }
+
+    /**
+     * @param stage
+     *            the stage to set
+     */
+    public void setStage(final Stage stage) {
+        this.stage = stage;
     }
 
 }

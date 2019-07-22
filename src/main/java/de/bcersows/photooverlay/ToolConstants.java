@@ -22,6 +22,8 @@ public class ToolConstants {
         FA_REPEAT("\uf01e"),
         /** Exit/logout icon. **/
         FA_EXIT("\uf2f5"),
+        /** Drag/move icon. **/
+        FA_DRAG("\uf0b2"),
 
         /** Sort alphabetically ascending. **/
         FA_SORT_ASC("\uf15d"),

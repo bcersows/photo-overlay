@@ -20,6 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -43,8 +44,8 @@ public class Main extends Application {
     /** Path to the icon file. **/
     private static final String ICON_PATH = "/style/imgs/icon.png";
 
-    private Stage overlayStage;
-    private Stage configStage;
+    private LoadedView overlayView;
+    private LoadedView configView;
 
     @Override
     public void start(@Nonnull final Stage stage) throws Exception {
@@ -64,29 +65,35 @@ public class Main extends Application {
 
         // create the Guice injector
         final Injector injector = Guice.createInjector(new ApplicationConfig(this, overlayConfig, stage));
-        final Scene rootScene = loadView(injector);
+        this.overlayView = loadView(injector);
+        final Scene rootScene = this.overlayView.getScene();
+        rootScene.setFill(Color.TRANSPARENT);
 
         stage.setScene(rootScene);
         stage.show();
 
-        this.overlayStage = stage;
+        this.overlayView.setStage(stage);
+        this.overlayView.getController().show();
     }
 
     /**
      * @param injector
      * @throws IOException
+     * @return the loaded overlay view
      */
-    private Scene loadView(@Nonnull final Injector injector) throws IOException {
+    private LoadedView loadView(@Nonnull final Injector injector) throws IOException {
         // load the normal photo overlay
         final LoadedView loadedPhotoOverlay = loadActivity(injector, "/fxml/Overlay.fxml", OverlayController.class);
 
         final LoadedView loadedOverlayConfig = loadActivity(injector, "/fxml/Config.fxml", OverlayConfigController.class);
-        configStage = new Stage();
+        final Stage configStage = new Stage();
         configStage.setTitle("CONFIGURATION");
         configStage.setScene(loadedOverlayConfig.getScene());
-        configStage.setOnCloseRequest(evt -> this.overlayStage.show());
+        configStage.setOnCloseRequest(evt -> this.overlayView.getStage().show());
+        loadedOverlayConfig.setStage(configStage);
+        this.configView = loadedOverlayConfig;
 
-        return loadedPhotoOverlay.getScene();
+        return loadedPhotoOverlay;
     }
 
     /**
@@ -133,8 +140,9 @@ public class Main extends Application {
     }
 
     public void showConfig() {
-        this.configStage.show();
-        this.overlayStage.hide();
+        this.configView.getStage().show();
+        this.configView.getController().show();
+        this.overlayView.getStage().hide();
     }
 
     /** Launch the application. **/

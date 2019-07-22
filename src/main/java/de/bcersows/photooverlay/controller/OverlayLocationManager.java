@@ -15,6 +15,9 @@ import javafx.stage.Stage;
 public class OverlayLocationManager {
     private static final Logger LOG = LoggerFactory.getLogger(OverlayLocationManager.class);
 
+    /** For the dropshadow to work correctly we need a bit of extra margin. **/
+    private static final double BACKGROUND_DROPSHADOW_MARGIN = 25;
+
     private final Stage stage;
 
     public OverlayLocationManager(@Nonnull final Stage stage) {
@@ -32,7 +35,7 @@ public class OverlayLocationManager {
      * @param calculatedImageSize
      */
     public void resize(final CalculatedImageSize calculatedImageSize) {
-        this.stage.setWidth(calculatedImageSize.getWidth() + 15);
-        this.stage.setHeight(calculatedImageSize.getHeight() + 25);
+        this.stage.setWidth(calculatedImageSize.getWidth() + BACKGROUND_DROPSHADOW_MARGIN);
+        this.stage.setHeight(calculatedImageSize.getHeight() + BACKGROUND_DROPSHADOW_MARGIN);
     }
 }

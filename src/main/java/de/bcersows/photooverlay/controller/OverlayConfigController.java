@@ -24,4 +24,9 @@ public class OverlayConfigController implements ControllerInterface {
 
     }
 
+    @Override
+    public void show() {
+        // TODO fill fields with newest config
+    }
+
 }

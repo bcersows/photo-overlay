@@ -5,14 +5,23 @@
 	colorStop: RED;
 	colorWarn: ORANGE;
 	
-	colorHeaderText: WHITE;
+	colorText: WHITE;
+	colorTextInverted: #123456;
 	
 	-fx-font-family: "Montserrat";
 	-fx-font-size: 10pt;
+	
+	-fx-text-fill: colorText;
 }
 
-.transparent {
+.bg-transparent {
 	-fx-background-color: transparent;
+}
+.bg-normal {
+	-fx-background-color: colorBackground;
+}
+.text-normal {
+	-fx-text-fill: colorText;
 }
 
 .fontAwesome {
@@ -21,5 +30,42 @@
 }
 
 .drag-area {
-	-fx-background-color: rgba(255,0,0,0.2);
+	-fx-background-color: #bc3435AA;
+}
+
+/* Buttons */
+.button {
+	-fx-effect: null;
+	-fx-background-color: colorBc;
+	-fx-text-fill: colorText;
+}
+.button .icon-pane {
+	-fx-background-color: colorText;
+}
+.button .label {
+	-fx-text-fill: colorText;
+}
+.button:focused {
+	-fx-background-color: derive(colorBc, -6%);
+}
+.button:hover {
+	-fx-background-color: derive(colorBc, -15%);
+}
+.button:armed {
+	-fx-background-color: derive(colorBc, -24%);
+}
+
+.button:disabled {
+	-fx-effect: null;
+	-fx-background-color: transparent;
+	-fx-text-fill: colorTextInverted;
+}
+.button .icon-pane {
+	-fx-min-height: buttonIconSize;
+	-fx-min-width: buttonIconSize;
+	-fx-pref-height: buttonIconSize;
+	-fx-pref-width: buttonIconSize;
+	-fx-max-height: buttonIconSize;
+	-fx-max-width: buttonIconSize;
+	-fx-background-color: colorText;
 }
