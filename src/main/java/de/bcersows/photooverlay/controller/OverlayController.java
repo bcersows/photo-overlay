@@ -33,7 +33,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -43,7 +43,7 @@ public class OverlayController implements ControllerInterface {
     private static final Logger LOG = LoggerFactory.getLogger(OverlayController.class);
 
     @FXML
-    private BorderPane rootContent;
+    private StackPane rootContent;
 
     @FXML
     private Label labelNoImages;
