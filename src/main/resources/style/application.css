@@ -36,12 +36,16 @@
 .drag-area {
 	-fx-background-color: #bc3435AA;
 }
+.drag-area:hover {
+	-fx-background-color: derive(#bc3435AA, -10%);
+}
 
 /* Buttons */
 .button {
 	-fx-effect: null;
 	-fx-background-color: colorBc;
 	-fx-text-fill: colorText;
+	-fx-cursor: HAND;
 }
 .button .icon-pane {
 	-fx-background-color: colorText;
