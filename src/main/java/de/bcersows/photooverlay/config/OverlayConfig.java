@@ -1,7 +1,8 @@
-package de.bcersows.photooverlay;
+package de.bcersows.photooverlay.config;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -11,8 +12,11 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import de.bcersows.photooverlay.helper.FileHelper;
 
 /**
  * @author BCE
@@ -36,11 +40,13 @@ public class OverlayConfig {
         photos.add("D:/Tools/Photo/photos_export/saltyway/_DSC5883.jpg");
     }
 
+    /** Load the config. **/
     public final boolean loadConfig() {
         boolean couldLoad;
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(CONFIG_FILE_NAME), StandardCharsets.UTF_8)) {
             config.load(reader);
 
+            findImages();
             couldLoad = true;
         } catch (final IOException | InvalidPathException e) {
             LOG.error("Could not load config.", e);
@@ -50,6 +56,7 @@ public class OverlayConfig {
         return couldLoad;
     }
 
+    /** Save the current config. **/
     public final boolean saveConfig() {
         boolean couldSave;
 
@@ -66,10 +73,37 @@ public class OverlayConfig {
     }
 
     /**
+     * Find the images of the current folder.
+     */
+    public void findImages() {
+        final String folderPath = getFolder();
+
+        this.photos.clear();
+        if (StringUtils.isNotBlank(folderPath)) {
+            final File sourceFolder = new File(folderPath);
+            this.photos.addAll(FileHelper.findImages(sourceFolder));
+        } else {
+            LOG.warn("No folder given.");
+        }
+    }
+
+    /**
      * @return the photos
      */
     public Set<String> getPhotos() {
         return new HashSet<>(this.photos);
+    }
+
+    /** Get the chosen folder **/
+    public String getFolder() {
+        return this.config.getProperty(OverlayConfigKeys.FOLDER.name(), "");
+    }
+
+    /**
+     * @param folder
+     */
+    public void setFolder(final String folder) {
+        this.config.put(OverlayConfigKeys.FOLDER.name(), folder);
     }
 
 }

@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import com.google.inject.AbstractModule;
 
+import de.bcersows.photooverlay.config.OverlayConfig;
 import de.bcersows.photooverlay.controller.OverlayLocationManager;
 import javafx.stage.Stage;
 

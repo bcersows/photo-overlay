@@ -18,8 +18,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.bcersows.photooverlay.Main;
-import de.bcersows.photooverlay.OverlayConfig;
 import de.bcersows.photooverlay.ToolConstants;
+import de.bcersows.photooverlay.config.OverlayConfig;
 import de.bcersows.photooverlay.helper.CustomNamedThreadFactory;
 import de.bcersows.photooverlay.model.CalculatedImageSize;
 import de.bcersows.photooverlay.model.DragDelta;
