@@ -45,6 +45,10 @@ import javafx.scene.layout.VBox;
 public class OverlayController implements ControllerInterface {
     private static final Logger LOG = LoggerFactory.getLogger(OverlayController.class);
 
+    // TODO :
+    // - resize animation
+    // - timer to switch between images (able to stop it; also stop while dragging)
+
     /** The root content. **/
     @FXML
     private StackPane rootContent;

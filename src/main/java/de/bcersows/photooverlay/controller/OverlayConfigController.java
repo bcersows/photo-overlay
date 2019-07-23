@@ -25,11 +25,18 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 /**
+ * The controller for the config window.
+ * 
  * @author BCE
  */
 public class OverlayConfigController implements ControllerInterface {
     private static final Logger LOG = LoggerFactory.getLogger(OverlayConfigController.class);
 
+    // TODO :
+    // - ability to select multiple folders; have them as a list and be able to delete any of them via small x button
+    // - select corner which will always stay in the same place, even when resizing
+
+    /** Text for the amount label. **/
     private static final String TEXT_CURRENTLY_FOUND = "Found %s images in %s.";
 
     @FXML
@@ -51,6 +58,8 @@ public class OverlayConfigController implements ControllerInterface {
     private String configStorageFolder;
 
     /**
+     * Create instance.
+     * 
      * @param overlayConfig
      */
     @Inject
