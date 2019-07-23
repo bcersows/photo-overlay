@@ -12,6 +12,9 @@ public class ToolConstants {
     /** The maximum image size. **/
     public static final double MAX_IMAGE_SIZE = 500;
 
+    /** The log text for an action. **/
+    public static final String LOG_TEXT_ACTION = "Action detected: {}.";
+
     /** FontAwesome icons. **/
     public enum ICONS {
         /** Copy icon. **/

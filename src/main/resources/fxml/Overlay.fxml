@@ -25,7 +25,7 @@
             </VBox>
             <HBox maxHeight="-Infinity" prefHeight="30.0" prefWidth="400.0" spacing="10.0" styleClass="bg-transparent" StackPane.alignment="TOP_CENTER">
                <children>
-                  <HBox fx:id="dragBar" alignment="CENTER" onMouseDragged="#onMouseDraggedEvent" onMousePressed="#onMousePressedEvent" styleClass="drag-area" HBox.hgrow="ALWAYS">
+                  <HBox fx:id="dragBar" alignment="CENTER" onMouseDragged="#onMouseDraggedEvent" onMousePressed="#onMousePressedEvent" onMouseReleased="#onMouseReleasedEvent" styleClass="drag-area" HBox.hgrow="ALWAYS">
                      <children>
                         <Label fx:id="dragBarText" text="\\uf0b2">
                            <styleClass>

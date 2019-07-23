@@ -3,11 +3,14 @@ package de.bcersows.photooverlay.model;
 import de.bcersows.photooverlay.ToolConstants;
 
 /**
+ * Contains data about the size of an image.
+ * 
  * @author BCE
  */
 public class CalculatedImageSize {
+    /** The image width. **/
     private final double width;
-
+    /** The image height. **/
     private final double height;
 
     /**
@@ -34,6 +37,15 @@ public class CalculatedImageSize {
         return this.height;
     }
 
+    /**
+     * Calculate the image size. Scales the largest size down to {@link ToolConstants#MAX_IMAGE_SIZE}.
+     * 
+     * @param imageWidth
+     *            the actual image width
+     * @param imageHeight
+     *            the actual image height
+     * @return the calculated image size
+     */
     public static CalculatedImageSize calculate(final double imageWidth, final double imageHeight) {
         final double ratio = imageWidth / imageHeight;
 
