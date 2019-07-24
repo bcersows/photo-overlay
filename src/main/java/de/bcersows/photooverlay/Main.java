@@ -73,6 +73,9 @@ public class Main extends Application {
         stage.setScene(rootScene);
         stage.show();
 
+        // use the same icon in all windows
+        this.configView.getStage().getIcons().add(stage.getIcons().get(0));
+
         this.overlayView.setStage(stage);
         this.overlayView.getController().show();
     }

@@ -46,10 +46,6 @@ public class CustomNamedThreadFactory implements ThreadFactory {
     public CustomNamedThreadFactory(@Nonnull final String threadName, final boolean addCounter) {
         this.threadName = threadName;
         this.addCounter = addCounter;
-
-        if (null == threadName) {
-            throw new IllegalStateException("The thread name must not be null.");
-        }
     }
 
     @Override

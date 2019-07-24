@@ -23,7 +23,7 @@ public class ApplicationConfig extends AbstractModule {
     public ApplicationConfig(@Nonnull final Main main, @Nonnull final OverlayConfig config, @Nonnull final Stage stage) {
         this.main = main;
         this.config = config;
-        this.overlayLocationManager = new OverlayLocationManager(stage);
+        this.overlayLocationManager = new OverlayLocationManager(stage, config);
     }
 
     @Override

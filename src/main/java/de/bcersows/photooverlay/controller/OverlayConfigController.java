@@ -14,6 +14,7 @@ import com.google.inject.Inject;
 import com.jfoenix.controls.JFXTextField;
 
 import de.bcersows.photooverlay.ToolConstants;
+import de.bcersows.photooverlay.config.OrientationValue;
 import de.bcersows.photooverlay.config.OverlayConfig;
 import de.bcersows.photooverlay.helper.CustomNamedThreadFactory;
 import de.bcersows.photooverlay.helper.FxPlatformHelper;
@@ -21,6 +22,9 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleGroup;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -44,6 +48,17 @@ public class OverlayConfigController implements ControllerInterface {
 
     @FXML
     private Label labelCurrentlyFound;
+
+    @FXML
+    private RadioButton directionRadioTopLeft;
+    @FXML
+    private RadioButton directionRadioTopRight;
+    @FXML
+    private RadioButton directionRadioBottomLeft;
+    @FXML
+    private RadioButton directionRadioBottomRight;
+    @FXML
+    private ToggleGroup toggleGroupDirection;
 
     /** The overlay config. **/
     private final OverlayConfig overlayConfig;
@@ -75,7 +90,11 @@ public class OverlayConfigController implements ControllerInterface {
 
     @Override
     public void initialize() {
-        // nothing to do yet
+        // add the orientation values to the radio button user data
+        this.directionRadioTopLeft.setUserData(OrientationValue.TL);
+        this.directionRadioTopRight.setUserData(OrientationValue.TR);
+        this.directionRadioBottomLeft.setUserData(OrientationValue.BL);
+        this.directionRadioBottomRight.setUserData(OrientationValue.BR);
     }
 
     @Override
@@ -84,6 +103,27 @@ public class OverlayConfigController implements ControllerInterface {
         configStorageFolder = configuredFolder;
         this.textFieldFolder.setText(configuredFolder);
         updateAmountLabel();
+
+        // get the orientation and select the respective radio button
+        final OrientationValue orientation = this.overlayConfig.getOrientation();
+        final RadioButton buttonToSelect;
+        switch (orientation) {
+            case TR:
+                buttonToSelect = this.directionRadioTopRight;
+                break;
+            case BL:
+                buttonToSelect = this.directionRadioBottomLeft;
+                break;
+            case BR:
+                buttonToSelect = this.directionRadioBottomRight;
+                break;
+            case TL:
+                // intentional
+            default:
+                buttonToSelect = this.directionRadioTopLeft;
+                break;
+        }
+        buttonToSelect.setSelected(true);
     }
 
     @FXML
@@ -134,6 +174,15 @@ public class OverlayConfigController implements ControllerInterface {
                     overlayConfig.findImages();
                 }
 
+                // set the orientation
+                final Toggle selectedToggle = toggleGroupDirection.getSelectedToggle();
+                if (null != selectedToggle) {
+                    final Object orientationUserData = selectedToggle.getUserData();
+                    if (null != orientationUserData) {
+                        overlayConfig.setOrientation((OrientationValue) orientationUserData);
+                    }
+                }
+
                 // save the config
                 return overlayConfig.saveConfig();
             }
@@ -161,7 +210,7 @@ public class OverlayConfigController implements ControllerInterface {
     /**
      * Close this stage.
      */
-    private void closeStage(final ActionEvent event) {
+    private static void closeStage(final ActionEvent event) {
         final Stage stage = FxPlatformHelper.getCurrentStage(event);
         // obviously this call does not trigger the onCloseRequest, so have to do that manually
         stage.close();

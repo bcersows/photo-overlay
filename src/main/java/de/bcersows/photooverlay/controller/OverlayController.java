@@ -144,7 +144,7 @@ public class OverlayController implements ControllerInterface {
     /**
      * Get the next image URL from the given list, randomly.
      */
-    private String getNextImageUrl(@Nonnull final List<String> possiblePhotos) {
+    private static String getNextImageUrl(@Nonnull final List<String> possiblePhotos) {
         // FIXME do not create a new random every time
         final int index = new SplittableRandom().nextInt(possiblePhotos.size());
         return possiblePhotos.get(index);
@@ -224,11 +224,24 @@ public class OverlayController implements ControllerInterface {
         this.main.onCloseRequest(null);
     }
 
+    private boolean toggle = false;
+
     @FXML
     protected void onMouseClickedOnImageView(final MouseEvent event) {
         LOG.trace(ToolConstants.LOG_TEXT_ACTION, event);
 
         nextImage();
+        toggle = !toggle;
+        double one;
+        double two;
+        if (toggle) {
+            one = 500;
+            two = 300;
+        } else {
+            one = 300;
+            two = 500;
+        }
+        // this.overlayLocationManager.resize(CalculatedImageSize.calculate(one, two));
     }
 
     /** Event for the pressed mouse drag detection. **/
@@ -262,7 +275,7 @@ public class OverlayController implements ControllerInterface {
     /**
      * Returns if the given mouse event was started using a drag button.
      */
-    private boolean isDragButton(@Nonnull final MouseEvent event) {
+    private static boolean isDragButton(@Nonnull final MouseEvent event) {
         return event.getButton() == MouseButton.PRIMARY;
     }
 

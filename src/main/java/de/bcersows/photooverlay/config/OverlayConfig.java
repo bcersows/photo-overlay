@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +35,7 @@ public class OverlayConfig {
     private final Properties config = new Properties();
 
     public OverlayConfig() {
-        photos.add("D:/Tools/Photo/photos_export/america/_DSC6204.jpg");
-        photos.add("D:/Tools/Photo/photos_export/america/_DSC6230.jpg");
-        photos.add("D:/Tools/Photo/photos_export/america/_DSC6232.jpg");
-        photos.add("D:/Tools/Photo/photos_export/saltyway/IMG_3543.jpg");
-        photos.add("D:/Tools/Photo/photos_export/saltyway/_DSC5883.jpg");
+        // nothing
     }
 
     /** Load the config. **/
@@ -88,22 +86,46 @@ public class OverlayConfig {
     }
 
     /**
-     * @return the photos
+     * Get the found photos.
      */
     public Set<String> getPhotos() {
         return new HashSet<>(this.photos);
     }
 
-    /** Get the chosen folder **/
+    /** Get the chosen folder. **/
     public String getFolder() {
         return this.config.getProperty(OverlayConfigKeys.FOLDER.name(), "");
     }
 
     /**
+     * Set the folder.
+     * 
      * @param folder
      */
     public void setFolder(final String folder) {
         this.config.put(OverlayConfigKeys.FOLDER.name(), folder);
+    }
+
+    /** Get the overlay orientation. **/
+    @Nonnull
+    public OrientationValue getOrientation() {
+        final String property = this.config.getProperty(OverlayConfigKeys.ORIENTATION.name(), OrientationValue.TL.name());
+
+        try {
+            return OrientationValue.valueOf(property);
+        } catch (final IllegalArgumentException e) {
+            LOG.warn("Invalid value for orientation: {}", property);
+            return OrientationValue.TL;
+        }
+    }
+
+    /**
+     * Set the overlay orientation.
+     * 
+     * @param orientation
+     */
+    public void setOrientation(@Nonnull final OrientationValue orientation) {
+        this.config.put(OverlayConfigKeys.ORIENTATION.name(), orientation.name());
     }
 
 }

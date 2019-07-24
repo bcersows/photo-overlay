@@ -35,7 +35,7 @@ public class ToolConstants {
 
         public final String code;
 
-        private ICONS(final String code) {
+        ICONS(final String code) {
             this.code = code;
         }
     }
