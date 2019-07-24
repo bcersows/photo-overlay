@@ -28,6 +28,10 @@
 	-fx-font-size: 1.3em;
 }
 
+.text-small{
+	-fx-font-size: 0.6em;
+}
+
 .fontAwesome {
 	-fx-font-family: "Font Awesome 5 Free";
 	-fx-font-weight: 100;

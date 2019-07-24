@@ -11,9 +11,12 @@ import javax.annotation.Nonnull;
  * @author BCE
  */
 public enum OverlayConfigKeys {
+    /** The image folder. **/
     FOLDER("The image folder. Should be an absolute path.", "."),
-
-    ORIENTATION("Defines which overlay edge will stay the same during resize operations. Possible values: TL,TR, BL, BR", "TL")
+    /** Resize orientation. **/
+    ORIENTATION("Defines which overlay edge will stay the same during resize operations. Possible values: TL,TR, BL, BR", "TL"),
+    /** If to cycle automatically. **/
+    CYCLE("If to cycle through the images automatically.", Boolean.TRUE.toString()),
 
     ;
 

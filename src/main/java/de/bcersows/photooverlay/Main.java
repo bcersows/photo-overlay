@@ -77,7 +77,7 @@ public class Main extends Application {
         this.configView.getStage().getIcons().add(stage.getIcons().get(0));
 
         this.overlayView.setStage(stage);
-        this.overlayView.getController().show();
+        this.overlayView.getController().prepare();
     }
 
     /**
@@ -93,7 +93,7 @@ public class Main extends Application {
         final Stage configStage = new Stage();
         configStage.setTitle("CONFIGURATION");
         configStage.setScene(loadedOverlayConfig.getScene());
-        configStage.setOnCloseRequest(evt -> this.overlayView.getStage().show());
+        configStage.setOnCloseRequest(evt -> showOverlay());
         loadedOverlayConfig.setStage(configStage);
         this.configView = loadedOverlayConfig;
 
@@ -143,9 +143,23 @@ public class Main extends Application {
         System.exit(0);
     }
 
+    /** Show the overlay. **/
+    public void showOverlay() {
+        // first show the overlay...
+        this.overlayView.getController().prepare();
+        this.overlayView.getStage().show();
+        // ... and then clear the config
+        this.configView.getController().clear();
+        this.configView.getStage().hide();
+    }
+
+    /** Show the config. **/
     public void showConfig() {
+        // first show the config...
+        this.configView.getController().prepare();
         this.configView.getStage().show();
-        this.configView.getController().show();
+        // ... and then clear the overlay
+        this.overlayView.getController().clear();
         this.overlayView.getStage().hide();
     }
 

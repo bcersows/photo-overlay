@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -44,7 +45,7 @@
                         <Label fx:id="labelCurrentlyFound" text="[amount text]" wrapText="true" />
                      </children>
                   </VBox>
-                  <VBox>
+                  <VBox spacing="10.0">
                      <children>
                         <Label fx:id="labelHeadingDirection" styleClass="text-heading" text="RESIZE DIRECTION" />
                         <HBox>
@@ -87,6 +88,12 @@
                               </GridPane>
                            </children>
                         </HBox>
+                     </children>
+                  </VBox>
+                  <VBox spacing="10.0">
+                     <children>
+                        <Label fx:id="labelHeadingOthers" styleClass="text-heading" text="OTHER SETTINGS" />
+                        <JFXCheckBox fx:id="checkBoxCycle" text="cycle through images" />
                      </children>
                   </VBox>
                </children>

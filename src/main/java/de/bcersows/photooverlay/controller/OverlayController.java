@@ -21,6 +21,8 @@ import de.bcersows.photooverlay.Main;
 import de.bcersows.photooverlay.ToolConstants;
 import de.bcersows.photooverlay.config.OverlayConfig;
 import de.bcersows.photooverlay.helper.CustomNamedThreadFactory;
+import de.bcersows.photooverlay.helper.FxPlatformHelper;
+import de.bcersows.photooverlay.helper.ImageCycleHelper;
 import de.bcersows.photooverlay.model.CalculatedImageSize;
 import de.bcersows.photooverlay.model.DragDelta;
 import de.bcersows.photooverlay.model.ImageInfo;
@@ -45,10 +47,11 @@ import javafx.scene.layout.VBox;
 public class OverlayController implements ControllerInterface {
     private static final Logger LOG = LoggerFactory.getLogger(OverlayController.class);
 
+    /** A random generator. **/
+    private static final SplittableRandom RANDOM = new SplittableRandom();
+
     // TODO :
     // - resize animation
-    // - timer to switch between images (able to stop it; also stop while dragging)
-    // -
 
     /** The root content. **/
     @FXML
@@ -71,6 +74,9 @@ public class OverlayController implements ControllerInterface {
     /** A label to display the file name. **/
     @FXML
     private Label labelFileName;
+    /** A label to announce a new cycle. **/
+    @FXML
+    private Label labelCounter;
 
     /** The overlay location manager. **/
     private final OverlayLocationManager overlayLocationManager;
@@ -94,6 +100,9 @@ public class OverlayController implements ControllerInterface {
     /** The currently displayed image URL. **/
     private String currentUrl;
 
+    @Nonnull
+    private final ImageCycleHelper cycleHelper;
+
     @Inject
     public OverlayController(@Nonnull final OverlayLocationManager overlayLocationManager, final Main main, final OverlayConfig overlayConfig) {
         this.overlayLocationManager = overlayLocationManager;
@@ -102,6 +111,8 @@ public class OverlayController implements ControllerInterface {
 
         // start the executor
         this.executor = Executors.newSingleThreadScheduledExecutor(new CustomNamedThreadFactory("PHOTO_LOAD"));
+
+        this.cycleHelper = new ImageCycleHelper(this::nextImage, this::updateCycleCounter);
     }
 
     @Override
@@ -113,9 +124,14 @@ public class OverlayController implements ControllerInterface {
     }
 
     @Override
-    public void show() {
-        // load the first image
-        nextImage();
+    public void prepare() {
+        // load the first image in the timer
+        this.cycleHelper.startImageCycleTimer();
+    }
+
+    @Override
+    public void clear() {
+        this.cycleHelper.stopImageCycleTimer(true);
     }
 
     /**
@@ -150,8 +166,7 @@ public class OverlayController implements ControllerInterface {
      * Get the next image URL from the given list, randomly.
      */
     private static String getNextImageUrl(@Nonnull final List<String> possiblePhotos) {
-        // FIXME do not create a new random every time
-        final int index = new SplittableRandom().nextInt(possiblePhotos.size());
+        final int index = RANDOM.nextInt(possiblePhotos.size());
         return possiblePhotos.get(index);
     }
 
@@ -213,13 +228,19 @@ public class OverlayController implements ControllerInterface {
         this.currentUrl = imageUrl;
     }
 
+    /** Update the counter label. **/
+    private void updateCycleCounter(@Nonnull final Integer counter) {
+        FxPlatformHelper.runOnFxThread(() -> {
+            LOG.info("Counter: {}", counter);
+            this.labelCounter.setText("Next in: " + counter);
+        });
+    }
+
     /** Action event to open the settings. **/
     @FXML
     protected void onActionButtonSettings(final ActionEvent event) {
         LOG.trace(ToolConstants.LOG_TEXT_ACTION, event);
 
-        // JFXSnackbar bar = new JFXSnackbar(pane);
-        // bar.enqueue(new SnackbarEvent("Notification Msg"))
         this.main.showConfig();
     }
 
@@ -235,7 +256,11 @@ public class OverlayController implements ControllerInterface {
     protected void onMouseClickedOnImageView(final MouseEvent event) {
         LOG.trace(ToolConstants.LOG_TEXT_ACTION, event);
 
+        // show the next image
         nextImage();
+
+        // and reset the auto-cycler
+        this.cycleHelper.resetInterval();
     }
 
     /** Event for the pressed mouse drag detection. **/
@@ -254,6 +279,7 @@ public class OverlayController implements ControllerInterface {
         if (isDragButton(event)) {
             LOG.trace("Mouse pressed");
             this.newLocation = new DragDelta(0, 0, event.getScreenX(), event.getScreenY());
+            this.cycleHelper.setCycleBlocked(true);
         }
     }
 
@@ -263,6 +289,7 @@ public class OverlayController implements ControllerInterface {
         if (isDragButton(event)) {
             LOG.trace("Mouse released");
             this.newLocation = null;
+            this.cycleHelper.setCycleBlocked(false);
         }
     }
 

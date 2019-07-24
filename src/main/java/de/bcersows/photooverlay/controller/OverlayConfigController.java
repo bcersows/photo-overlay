@@ -25,6 +25,7 @@ import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Toggle;
@@ -68,6 +69,10 @@ public class OverlayConfigController implements ControllerInterface {
     private RadioButton directionRadioBottomRight;
     @FXML
     private ToggleGroup toggleGroupDirection;
+
+    /** The check box for the cycle setting. **/
+    @FXML
+    private CheckBox checkBoxCycle;
 
     /** The overlay config. **/
     private final OverlayConfig overlayConfig;
@@ -113,7 +118,7 @@ public class OverlayConfigController implements ControllerInterface {
     }
 
     @Override
-    public void show() {
+    public void prepare() {
         // get the folders and store the hash
         final List<String> configuredFolders = this.overlayConfig.getFolders();
         this.configStorageFolders.clear();
@@ -143,6 +148,14 @@ public class OverlayConfigController implements ControllerInterface {
                 break;
         }
         buttonToSelect.setSelected(true);
+
+        // set other options
+        this.checkBoxCycle.setSelected(this.overlayConfig.getCycle());
+    }
+
+    @Override
+    public void clear() {
+        this.configStorageFolders.clear();
     }
 
     @FXML
@@ -247,6 +260,9 @@ public class OverlayConfigController implements ControllerInterface {
                         overlayConfig.setOrientation((OrientationValue) orientationUserData);
                     }
                 }
+
+                // other options
+                overlayConfig.setCycle(checkBoxCycle.isSelected());
 
                 // save the config
                 return overlayConfig.saveConfig();

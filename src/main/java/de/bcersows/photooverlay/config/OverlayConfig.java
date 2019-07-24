@@ -139,4 +139,21 @@ public class OverlayConfig {
         this.config.put(OverlayConfigKeys.ORIENTATION.name(), orientation.name());
     }
 
+    /** Get if to cycle. **/
+    @Nonnull
+    public boolean getCycle() {
+        final String property = this.config.getProperty(OverlayConfigKeys.CYCLE.name(), Boolean.TRUE.toString());
+
+        return Boolean.getBoolean(property);
+    }
+
+    /**
+     * Set the overlay orientation.
+     * 
+     * @param orientation
+     */
+    public void setCycle(@Nonnull final boolean cycle) {
+        this.config.put(OverlayConfigKeys.CYCLE.name(), Boolean.toString(cycle));
+    }
+
 }

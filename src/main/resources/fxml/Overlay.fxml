@@ -43,6 +43,12 @@
                </children>
             </HBox>
             <Label fx:id="labelFileName" styleClass="text-normal" text="-" StackPane.alignment="BOTTOM_RIGHT" />
+            <Label fx:id="labelCounter" text="+" StackPane.alignment="BOTTOM_LEFT">
+               <styleClass>
+                  <String fx:value="text-small" />
+                  <String fx:value="text-normal" />
+               </styleClass>
+            </Label>
          </children>
          <opaqueInsets>
             <Insets bottom="15.0" right="15.0" />
