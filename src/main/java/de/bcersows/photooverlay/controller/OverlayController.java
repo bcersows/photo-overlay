@@ -224,24 +224,11 @@ public class OverlayController implements ControllerInterface {
         this.main.onCloseRequest(null);
     }
 
-    private boolean toggle = false;
-
     @FXML
     protected void onMouseClickedOnImageView(final MouseEvent event) {
         LOG.trace(ToolConstants.LOG_TEXT_ACTION, event);
 
         nextImage();
-        toggle = !toggle;
-        double one;
-        double two;
-        if (toggle) {
-            one = 500;
-            two = 300;
-        } else {
-            one = 300;
-            two = 500;
-        }
-        // this.overlayLocationManager.resize(CalculatedImageSize.calculate(one, two));
     }
 
     /** Event for the pressed mouse drag detection. **/

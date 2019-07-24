@@ -38,7 +38,6 @@ public class OverlayConfigController implements ControllerInterface {
 
     // TODO :
     // - ability to select multiple folders; have them as a list and be able to delete any of them via small x button
-    // - select corner which will always stay in the same place, even when resizing
 
     /** Text for the amount label. **/
     private static final String TEXT_CURRENTLY_FOUND = "Found %s images in %s.";
