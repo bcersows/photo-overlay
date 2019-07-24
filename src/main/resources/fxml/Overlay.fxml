@@ -42,6 +42,7 @@
                   <Button fx:id="buttonClose" mnemonicParsing="false" onAction="#onActionButtonClose" text="CLOSE" />
                </children>
             </HBox>
+            <Label fx:id="labelFileName" styleClass="text-normal" text="-" StackPane.alignment="BOTTOM_RIGHT" />
          </children>
          <opaqueInsets>
             <Insets bottom="15.0" right="15.0" />

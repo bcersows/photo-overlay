@@ -48,6 +48,7 @@ public class OverlayController implements ControllerInterface {
     // TODO :
     // - resize animation
     // - timer to switch between images (able to stop it; also stop while dragging)
+    // -
 
     /** The root content. **/
     @FXML
@@ -66,6 +67,10 @@ public class OverlayController implements ControllerInterface {
     /** The image view used to display the photos. **/
     @FXML
     private ImageView imageView;
+
+    /** A label to display the file name. **/
+    @FXML
+    private Label labelFileName;
 
     /** The overlay location manager. **/
     private final OverlayLocationManager overlayLocationManager;
@@ -189,6 +194,8 @@ public class OverlayController implements ControllerInterface {
             rootContent.setPrefWidth(calculatedImageSize.getWidth());
 
             this.overlayLocationManager.resize(calculatedImageSize);
+
+            this.labelFileName.setText(result.getUrl());
 
             LOG.info("Loaded image {}. Real size: {}/{}, calculated size: {}/{}", result.getUrl(), result.getWidth(), result.getHeight(),
                     calculatedImageSize.getWidth(), calculatedImageSize.getHeight());

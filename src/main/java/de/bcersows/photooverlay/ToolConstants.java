@@ -28,6 +28,9 @@ public class ToolConstants {
         /** Drag/move icon. **/
         FA_DRAG("\uf0b2"),
 
+        /** Trash icon. **/
+        FA_TRASH("\uf2ed"),
+
         /** Sort alphabetically ascending. **/
         FA_SORT_ASC("\uf15d"),
         /** Sort alphabetically descending. **/

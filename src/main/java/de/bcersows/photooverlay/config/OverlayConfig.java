@@ -2,25 +2,28 @@ package de.bcersows.photooverlay.config;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.bcersows.photooverlay.helper.FileHelper;
 
 /**
+ * Hold the overlay configuration.
+ * 
  * @author BCE
  */
 public class OverlayConfig {
@@ -28,7 +31,10 @@ public class OverlayConfig {
 
     /** Name of the config file. **/
     private static final String CONFIG_FILE_NAME = "photooverlay.properties";
+    /** Separator between multiple values. **/
+    private static final String SEPARATOR = ";";
 
+    /** The list of found photos. **/
     private final Set<String> photos = new HashSet<>();
 
     /** The application config. **/
@@ -74,14 +80,13 @@ public class OverlayConfig {
      * Find the images of the current folder.
      */
     public void findImages() {
-        final String folderPath = getFolder();
+        final List<String> folderPaths = getFolders();
 
         this.photos.clear();
-        if (StringUtils.isNotBlank(folderPath)) {
-            final File sourceFolder = new File(folderPath);
-            this.photos.addAll(FileHelper.findImages(sourceFolder));
+        if (!folderPaths.isEmpty()) {
+            this.photos.addAll(FileHelper.findImages(folderPaths));
         } else {
-            LOG.warn("No folder given.");
+            LOG.warn("No folder(s) given.");
         }
     }
 
@@ -92,18 +97,24 @@ public class OverlayConfig {
         return new HashSet<>(this.photos);
     }
 
-    /** Get the chosen folder. **/
-    public String getFolder() {
-        return this.config.getProperty(OverlayConfigKeys.FOLDER.name(), "");
+    /** Get the chosen folder(s). **/
+    public List<String> getFolders() {
+        // get from config...
+        final String configuredFolders = this.config.getProperty(OverlayConfigKeys.FOLDER.name(), "");
+        // ... and split into list
+        return Arrays.asList(configuredFolders.split(SEPARATOR));
     }
 
     /**
-     * Set the folder.
+     * Set the folder(s).
      * 
-     * @param folder
+     * @param folders
      */
-    public void setFolder(final String folder) {
-        this.config.put(OverlayConfigKeys.FOLDER.name(), folder);
+    public void setFolders(@Nonnull final List<String> folders) {
+        // turn list into String...
+        final String folderString = folders.stream().collect(Collectors.joining(SEPARATOR));
+        // ... and save it
+        this.config.put(OverlayConfigKeys.FOLDER.name(), folderString);
     }
 
     /** Get the overlay orientation. **/

@@ -27,9 +27,20 @@
                         <HBox spacing="10.0">
                            <children>
                               <JFXTextField fx:id="textFieldFolder" HBox.hgrow="ALWAYS" />
-                              <Button fx:id="buttonFolder" mnemonicParsing="false" onAction="#onActionButtonFolder" text="SEARCH" />
+                              <Button fx:id="buttonFolderSearch" mnemonicParsing="false" onAction="#onActionButtonFolderSearch" text="SEARCH" />
+                              <Button fx:id="buttonFolderAdd" mnemonicParsing="false" onAction="#onActionButtonFolderAdd" text="ADD" />
                            </children>
                         </HBox>
+                        <VBox>
+                           <children>
+                              <Label text="Configured folders:" />
+                              <VBox fx:id="areaFolders" spacing="5.0">
+                                 <padding>
+                                    <Insets left="10.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </VBox>
                         <Label fx:id="labelCurrentlyFound" text="[amount text]" wrapText="true" />
                      </children>
                   </VBox>
