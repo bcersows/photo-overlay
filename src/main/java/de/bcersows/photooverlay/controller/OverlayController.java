@@ -125,8 +125,15 @@ public class OverlayController implements ControllerInterface {
 
     @Override
     public void prepare() {
-        // load the first image in the timer
-        this.cycleHelper.startImageCycleTimer();
+        this.labelCounter.setText(null);
+
+        if (this.overlayConfig.getCycle()) {
+            // load the first image in the timer
+            this.cycleHelper.startImageCycleTimer();
+        } else {
+            // if not cycling, need to show the first image manually
+            this.nextImage();
+        }
     }
 
     @Override
@@ -231,7 +238,7 @@ public class OverlayController implements ControllerInterface {
     /** Update the counter label. **/
     private void updateCycleCounter(@Nonnull final Integer counter) {
         FxPlatformHelper.runOnFxThread(() -> {
-            LOG.info("Counter: {}", counter);
+            LOG.trace("Counter: {}", counter);
             this.labelCounter.setText("Next in: " + counter);
         });
     }

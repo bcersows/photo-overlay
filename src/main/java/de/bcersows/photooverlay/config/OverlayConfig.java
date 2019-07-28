@@ -20,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.bcersows.photooverlay.helper.FileHelper;
+import de.bcersows.photooverlay.model.FileChangeType;
+import de.bcersows.photooverlay.model.FileChanges;
 
 /**
  * Hold the overlay configuration.
@@ -85,8 +87,18 @@ public class OverlayConfig {
         this.photos.clear();
         if (!folderPaths.isEmpty()) {
             this.photos.addAll(FileHelper.findImages(folderPaths));
+            try {
+                FileHelper.startFolderMonitoring(folderPaths, this::monitorFolderChangesConsumer);
+            } catch (final IOException e) {
+                LOG.error("Could not start folder monitoring.", e);
+            }
         } else {
             LOG.warn("No folder(s) given.");
+            try {
+                FileHelper.stopFolderMonitoring();
+            } catch (final IOException e) {
+                LOG.error("Could not stop folder monitoring.", e);
+            }
         }
     }
 
@@ -154,6 +166,18 @@ public class OverlayConfig {
      */
     public void setCycle(@Nonnull final boolean cycle) {
         this.config.put(OverlayConfigKeys.CYCLE.name(), Boolean.toString(cycle));
+    }
+
+    /** Consumer for the folder monitor. **/
+    private void monitorFolderChangesConsumer(@Nonnull final FileChanges fileChanges) {
+        fileChanges.getChanges().forEach(change -> {
+            LOG.info("Change detected: {}.", change);
+            if (change.getType() == FileChangeType.ADDED) {
+                this.photos.add(change.getPath());
+            } else {
+                this.photos.remove(change.getPath());
+            }
+        });
     }
 
 }
