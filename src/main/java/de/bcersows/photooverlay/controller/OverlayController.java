@@ -230,7 +230,7 @@ public class OverlayController implements ControllerInterface {
 
         // submit the task for execution
         this.currentImageLoadTask = this.executor.submit(imageLoadTask);
-        LOG.debug("Started loading a new image.");
+        LOG.trace("Started loading a new image.");
 
         this.currentUrl = imageUrl;
     }
