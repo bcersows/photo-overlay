@@ -17,6 +17,8 @@ public enum OverlayConfigKeys {
     ORIENTATION("Defines which overlay edge will stay the same during resize operations. Possible values: TL,TR, BL, BR", "TL"),
     /** If to cycle automatically. **/
     CYCLE("If to cycle through the images automatically.", Boolean.TRUE.toString()),
+    /** If overlay stays on top. **/
+    ON_TOP("If overlay stays on top.", Boolean.TRUE.toString()),
 
     ;
 

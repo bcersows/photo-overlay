@@ -192,7 +192,7 @@ public final class FileHelper {
         existingButNotUsedFolders.forEach(unusedFolder -> watchKeys.get(unusedFolder).cancel());
         /// remove the unused from the list
         watchKeys.keySet().removeAll(existingButNotUsedFolders);
-        LOG.trace("Removed {} old folders.", existingButNotUsedFolders.size());
+        LOG.trace("Removed {} old folders: {}.", existingButNotUsedFolders.size(), existingButNotUsedFolders);
     }
 
     /**

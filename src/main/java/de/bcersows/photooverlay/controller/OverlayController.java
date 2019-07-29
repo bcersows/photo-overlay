@@ -127,7 +127,7 @@ public class OverlayController implements ControllerInterface {
     public void prepare() {
         this.labelCounter.setText(null);
 
-        if (this.overlayConfig.getCycle()) {
+        if (this.overlayConfig.isCycle()) {
             // load the first image in the timer
             this.cycleHelper.startImageCycleTimer();
         } else {

@@ -45,49 +45,57 @@ public class Main extends Application {
     /** Path to the icon file. **/
     private static final String ICON_PATH = "/style/imgs/icon.png";
 
+    /** The view for the overlay. **/
     private LoadedView overlayView;
+    /** The view for the config. **/
     private LoadedView configView;
 
+    /** The tool config. **/
+    @Nonnull
+    private final OverlayConfig overlayConfig = new OverlayConfig();
+
     @Override
-    public void start(@Nonnull final Stage stage) throws Exception {
+    public void start(@Nonnull final Stage stageForOverlay) throws Exception {
         LOG.info("Start application.");
 
         LOG.debug("Initializing.");
-        final OverlayConfig overlayConfig = new OverlayConfig();
         overlayConfig.loadConfig();
 
-        stage.setTitle(APPLICATION_NAME);
-        stage.setOnCloseRequest(this::onCloseRequest);
-        stage.setMinHeight(WINDOW_MIN_HEIGHT);
-        stage.setMinWidth(WINDOW_MIN_WIDTH);
-        stage.getIcons().add(new Image(this.getClass().getResourceAsStream(ICON_PATH)));
-        stage.setAlwaysOnTop(true);
-        stage.initStyle(StageStyle.TRANSPARENT);
+        stageForOverlay.setTitle(APPLICATION_NAME);
+        stageForOverlay.setOnCloseRequest(this::onCloseRequest);
+        stageForOverlay.setMinHeight(WINDOW_MIN_HEIGHT);
+        stageForOverlay.setMinWidth(WINDOW_MIN_WIDTH);
+        stageForOverlay.getIcons().add(new Image(this.getClass().getResourceAsStream(ICON_PATH)));
+        stageForOverlay.initStyle(StageStyle.TRANSPARENT);
 
         // create the Guice injector
-        final Injector injector = Guice.createInjector(new ApplicationConfig(this, overlayConfig, stage));
-        this.overlayView = loadView(injector);
+        final Injector injector = Guice.createInjector(new ApplicationConfig(this, overlayConfig, stageForOverlay));
+        this.overlayView = loadViews(injector, stageForOverlay);
+
+        // set up the scene
         final Scene rootScene = this.overlayView.getScene();
         rootScene.setFill(Color.TRANSPARENT);
-
-        stage.setScene(rootScene);
-        stage.show();
+        // add the scene to the stage
+        stageForOverlay.setScene(rootScene);
 
         // use the same icon in all windows
-        this.configView.getStage().getIcons().add(stage.getIcons().get(0));
+        this.configView.getStage().getIcons().add(stageForOverlay.getIcons().get(0));
 
-        this.overlayView.setStage(stage);
-        this.overlayView.getController().prepare();
+        showOverlay();
     }
 
     /**
+     * Load the views of the tool.
+     * 
      * @param injector
+     *            injector to use
      * @throws IOException
      * @return the loaded overlay view
      */
-    private LoadedView loadView(@Nonnull final Injector injector) throws IOException {
+    private LoadedView loadViews(@Nonnull final Injector injector, @Nonnull final Stage overlayStage) throws IOException {
         // load the normal photo overlay
         final LoadedView loadedPhotoOverlay = loadActivity(injector, "/fxml/Overlay.fxml", OverlayController.class);
+        loadedPhotoOverlay.setStage(overlayStage);
 
         final LoadedView loadedOverlayConfig = loadActivity(injector, "/fxml/Config.fxml", OverlayConfigController.class);
         final Stage configStage = new Stage();
@@ -146,6 +154,7 @@ public class Main extends Application {
     /** Show the overlay. **/
     public void showOverlay() {
         // first show the overlay...
+        this.overlayView.getStage().setAlwaysOnTop(this.overlayConfig.isOnTop());
         this.overlayView.getController().prepare();
         this.overlayView.getStage().show();
         // ... and then clear the config

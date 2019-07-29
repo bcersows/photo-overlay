@@ -10,11 +10,11 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-
 
 <BorderPane minHeight="300.0" minWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <center>
@@ -93,7 +93,12 @@
                   <VBox spacing="10.0">
                      <children>
                         <Label fx:id="labelHeadingOthers" styleClass="text-heading" text="OTHER SETTINGS" />
-                        <JFXCheckBox fx:id="checkBoxCycle" text="cycle through images" />
+                        <FlowPane hgap="25.0" prefWrapLength="600.0" vgap="15.0">
+                           <children>
+                              <JFXCheckBox fx:id="checkBoxCycle" text="cycle through images" />
+                              <JFXCheckBox fx:id="checkBoxOnTop" layoutX="10.0" layoutY="10.0" text="stay on top" />
+                           </children>
+                        </FlowPane>
                      </children>
                   </VBox>
                </children>

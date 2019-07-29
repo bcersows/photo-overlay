@@ -73,6 +73,9 @@ public class OverlayConfigController implements ControllerInterface {
     /** The check box for the cycle setting. **/
     @FXML
     private CheckBox checkBoxCycle;
+    /** The check box for the on-top setting. **/
+    @FXML
+    private CheckBox checkBoxOnTop;
 
     /** The overlay config. **/
     private final OverlayConfig overlayConfig;
@@ -150,7 +153,8 @@ public class OverlayConfigController implements ControllerInterface {
         buttonToSelect.setSelected(true);
 
         // set other options
-        this.checkBoxCycle.setSelected(this.overlayConfig.getCycle());
+        this.checkBoxCycle.setSelected(this.overlayConfig.isCycle());
+        this.checkBoxOnTop.setSelected(this.overlayConfig.isOnTop());
     }
 
     @Override
@@ -263,6 +267,7 @@ public class OverlayConfigController implements ControllerInterface {
 
                 // other options
                 overlayConfig.setCycle(checkBoxCycle.isSelected());
+                overlayConfig.setOnTop(checkBoxOnTop.isSelected());
 
                 // save the config
                 return overlayConfig.saveConfig();

@@ -109,7 +109,11 @@ public class OverlayConfig {
         return new HashSet<>(this.photos);
     }
 
-    /** Get the chosen folder(s). **/
+    /**
+     * Get the chosen folder(s).
+     * 
+     * @see OverlayConfigKeys#FOLDER
+     **/
     public List<String> getFolders() {
         // get from config...
         final String configuredFolders = this.config.getProperty(OverlayConfigKeys.FOLDER.name(), "");
@@ -129,7 +133,11 @@ public class OverlayConfig {
         this.config.put(OverlayConfigKeys.FOLDER.name(), folderString);
     }
 
-    /** Get the overlay orientation. **/
+    /**
+     * Get the overlay orientation.
+     * 
+     * @see OverlayConfigKeys#ORIENTATION
+     **/
     @Nonnull
     public OrientationValue getOrientation() {
         final String property = this.config.getProperty(OverlayConfigKeys.ORIENTATION.name(), OrientationValue.TL.name());
@@ -151,21 +159,40 @@ public class OverlayConfig {
         this.config.put(OverlayConfigKeys.ORIENTATION.name(), orientation.name());
     }
 
-    /** Get if to cycle. **/
+    /**
+     * Get if to cycle.
+     * 
+     * @see OverlayConfigKeys#CYCLE
+     **/
     @Nonnull
-    public boolean getCycle() {
+    public boolean isCycle() {
         final String property = this.config.getProperty(OverlayConfigKeys.CYCLE.name(), Boolean.TRUE.toString());
-
-        return Boolean.getBoolean(property);
+        return Boolean.parseBoolean(property);
     }
 
     /**
-     * Set the overlay orientation.
-     * 
-     * @param orientation
+     * Set if to cycle.
      */
     public void setCycle(@Nonnull final boolean cycle) {
         this.config.put(OverlayConfigKeys.CYCLE.name(), Boolean.toString(cycle));
+    }
+
+    /**
+     * Get if overlay shall be on top.
+     * 
+     * @see OverlayConfigKeys#ON_TOP
+     **/
+    @Nonnull
+    public boolean isOnTop() {
+        final String property = this.config.getProperty(OverlayConfigKeys.ON_TOP.name(), Boolean.TRUE.toString());
+        return Boolean.parseBoolean(property);
+    }
+
+    /**
+     * Set if overlay shall stay on top.
+     */
+    public void setOnTop(@Nonnull final boolean onTop) {
+        this.config.put(OverlayConfigKeys.ON_TOP.name(), Boolean.toString(onTop));
     }
 
     /** Consumer for the folder monitor. **/
