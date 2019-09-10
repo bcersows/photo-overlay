@@ -7,6 +7,7 @@ import java.util.SplittableRandom;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -49,6 +50,9 @@ public class OverlayController implements ControllerInterface {
 
     /** A random generator. **/
     private static final SplittableRandom RANDOM = new SplittableRandom();
+
+    /** The threshold (in ms) when a button press counts as a click and when as a hold. **/
+    private static final long TIMER_THRESHOLD_TO_STOP_CYCLE = 500;
 
     // TODO :
     // - resize animation
@@ -103,6 +107,9 @@ public class OverlayController implements ControllerInterface {
     @Nonnull
     private final ImageCycleHelper cycleHelper;
 
+    /****/
+    private final AtomicLong imageViewClickTimeCounter = new AtomicLong();
+
     @Inject
     public OverlayController(@Nonnull final OverlayLocationManager overlayLocationManager, final Main main, final OverlayConfig overlayConfig) {
         this.overlayLocationManager = overlayLocationManager;
@@ -121,6 +128,9 @@ public class OverlayController implements ControllerInterface {
         LOG.info("Init overlay.");
 
         this.dragBarText.setText(ToolConstants.ICONS.FA_DRAG.code);
+
+        // disable the cycle counter label, when cycle is blocked
+        this.labelCounter.disableProperty().bind(this.cycleHelper.isCycleBlocked());
     }
 
     @Override
@@ -238,7 +248,7 @@ public class OverlayController implements ControllerInterface {
     /** Update the counter label. **/
     private void updateCycleCounter(@Nonnull final Integer counter) {
         FxPlatformHelper.runOnFxThread(() -> {
-            LOG.trace("Counter: {}", counter);
+            LOG.trace("Image change counter: {}", counter);
             this.labelCounter.setText("Next in: " + counter);
         });
     }
@@ -259,20 +269,43 @@ public class OverlayController implements ControllerInterface {
         this.main.onCloseRequest(null);
     }
 
+    /** Action event for pressing the mouse on the image view area. **/
     @FXML
-    protected void onMouseClickedOnImageView(final MouseEvent event) {
+    protected void onMousePressedOnImageView(@Nonnull final MouseEvent event) {
         LOG.trace(ToolConstants.LOG_TEXT_ACTION, event);
 
-        // show the next image
-        nextImage();
+        // set the counter
+        imageViewClickTimeCounter.set(System.currentTimeMillis());
+        this.cycleHelper.setCycleBlocked(true);
+    }
 
-        // and reset the auto-cycler
-        this.cycleHelper.resetInterval();
+    /** Action event for releasing the mouse on the image view area. **/
+    @FXML
+    protected void onMouseReleasedOnImageView(@Nonnull final MouseEvent event) {
+        LOG.trace(ToolConstants.LOG_TEXT_ACTION, event);
+
+        // reset and extract the timer and calculate the difference between the initial press and the release
+        final long timeDifferenceSincePress = System.currentTimeMillis() - imageViewClickTimeCounter.getAndSet(0);
+
+        // reset the cycle block
+        this.cycleHelper.setCycleBlocked(false);
+
+        // if cycling and the start of the click is longer ago than the threshold, consume the event...
+        if (this.overlayConfig.isCycle() && timeDifferenceSincePress > TIMER_THRESHOLD_TO_STOP_CYCLE) {
+            event.consume();
+        } else {
+            // ... otherwise cycle to the next
+            // show the next image
+            nextImage();
+
+            // and reset the auto-cycler
+            this.cycleHelper.resetInterval();
+        }
     }
 
     /** Event for the pressed mouse drag detection. **/
     @FXML
-    protected void onMouseDraggedEvent(@Nonnull final MouseEvent event) {
+    protected void onMouseDraggedEventForDragBar(@Nonnull final MouseEvent event) {
         if (isDragButton(event)) {
             LOG.trace("Mouse Drag: {}/{}; {}/{}", event.getScreenX(), event.getScreenY(), event.getSceneX(), event.getSceneY());
             this.newLocation = new DragDelta(this.newLocation, event);
@@ -282,7 +315,7 @@ public class OverlayController implements ControllerInterface {
 
     /** Event for the pressed mouse drag start. **/
     @FXML
-    protected void onMousePressedEvent(@Nonnull final MouseEvent event) {
+    protected void onMousePressedEventForDragBar(@Nonnull final MouseEvent event) {
         if (isDragButton(event)) {
             LOG.trace("Mouse pressed");
             this.newLocation = new DragDelta(0, 0, event.getScreenX(), event.getScreenY());
@@ -292,7 +325,7 @@ public class OverlayController implements ControllerInterface {
 
     /** Event for the released mouse drag clearance. **/
     @FXML
-    protected void onMouseReleasedEvent(@Nonnull final MouseEvent event) {
+    protected void onMouseReleasedEventForDragBar(@Nonnull final MouseEvent event) {
         if (isDragButton(event)) {
             LOG.trace("Mouse released");
             this.newLocation = null;

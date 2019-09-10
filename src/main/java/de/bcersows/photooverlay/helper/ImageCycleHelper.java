@@ -2,7 +2,6 @@ package de.bcersows.photooverlay.helper;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -11,6 +10,9 @@ import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 
 /**
  * The image cycle helper contains the logic to cycle images on the overlay.
@@ -39,7 +41,7 @@ public class ImageCycleHelper {
     @Nullable
     private TimerTask cycleTimerTask;
     /** Have the ability to block the image cycle. **/
-    private final AtomicBoolean isImageCycleBlocked = new AtomicBoolean();
+    public final ReadOnlyBooleanWrapper isImageCycleBlocked = new ReadOnlyBooleanWrapper();
     /** The counter to determine if to show the next image. **/
     private final AtomicInteger cycleTimerCounter = new AtomicInteger();
 
@@ -78,6 +80,11 @@ public class ImageCycleHelper {
             this.cycleTimerTask = new TimerTask() {
                 @Override
                 public void run() {
+                    if (isImageCycleBlocked.get()) {
+                        // if the cycle is blocked
+                        return;
+                    }
+
                     final int decrementedCounter = cycleTimerCounter.decrementAndGet();
                     final boolean showNext = decrementedCounter <= 0;
 
@@ -86,7 +93,7 @@ public class ImageCycleHelper {
                     }
 
                     // only show next if not blocked
-                    if (showNext && !isImageCycleBlocked.get()) {
+                    if (showNext) {
                         LOG.trace("Detected to show next image.");
                         showNextImageAction.run();
                         // also need to reset the interval
@@ -102,6 +109,11 @@ public class ImageCycleHelper {
     /** Mark the cycle as being blocked. **/
     public void setCycleBlocked(final boolean isBlocked) {
         this.isImageCycleBlocked.set(isBlocked);
+    }
+
+    /** Return a read-only property if the cycle is currently blocked. **/
+    public ReadOnlyBooleanProperty isCycleBlocked() {
+        return this.isImageCycleBlocked.getReadOnlyProperty();
     }
 
     /** Reset the interval counter. **/

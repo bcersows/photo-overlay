@@ -12,56 +12,71 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<Pane styleClass="bg-transparent" stylesheets="@../style/application.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <StackPane fx:id="rootContent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0" styleClass="bg-transparent">
-         <children>
-            <VBox fx:id="imageArea" alignment="CENTER" styleClass="bg-transparent" StackPane.alignment="CENTER">
-               <children>
-                  <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0" onMouseClicked="#onMouseClickedOnImageView" pickOnBounds="true" preserveRatio="true" />
-                  <Label fx:id="labelNoImages" text="No images found for configured folder path!" />
-               </children>
-            </VBox>
-            <HBox maxHeight="-Infinity" prefHeight="30.0" prefWidth="400.0" spacing="10.0" styleClass="bg-transparent" StackPane.alignment="TOP_CENTER">
-               <children>
-                  <HBox fx:id="dragBar" alignment="CENTER" onMouseDragged="#onMouseDraggedEvent" onMousePressed="#onMousePressedEvent" onMouseReleased="#onMouseReleasedEvent" styleClass="drag-area" HBox.hgrow="ALWAYS">
-                     <children>
-                        <Label fx:id="dragBarText" text="\\uf0b2">
-                           <styleClass>
-                              <String fx:value="fontAwesome" />
-                              <String fx:value="text-normal" />
-                           </styleClass>
-                        </Label>
-                     </children>
-                     <cursor>
-                        <Cursor fx:constant="MOVE" />
-                     </cursor>
-                  </HBox>
-                  <Button fx:id="buttonSettings" mnemonicParsing="false" onAction="#onActionButtonSettings" text="SETTINGS" />
-                  <Button fx:id="buttonClose" mnemonicParsing="false" onAction="#onActionButtonClose" text="CLOSE" />
-               </children>
-            </HBox>
-            <Label fx:id="labelFileName" styleClass="text-normal" text="-" StackPane.alignment="BOTTOM_RIGHT" />
-            <Label fx:id="labelCounter" text="+" StackPane.alignment="BOTTOM_LEFT">
-               <styleClass>
-                  <String fx:value="text-small" />
-                  <String fx:value="text-normal" />
-               </styleClass>
-            </Label>
-         </children>
-         <opaqueInsets>
-            <Insets bottom="15.0" right="15.0" />
-         </opaqueInsets>
-         <effect>
-            <DropShadow color="#0000007f" offsetX="10.0" offsetY="10.0" />
-         </effect>
-      </StackPane>
-   </children>
-   <opaqueInsets>
-      <Insets />
-   </opaqueInsets>
-   <padding>
-      <Insets bottom="20.0" right="20.0" />
-   </padding>
+<Pane styleClass="bg-transparent" stylesheets="@../style/application.css"
+    xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <StackPane fx:id="rootContent" maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0"
+            styleClass="bg-transparent">
+            <children>
+                <VBox fx:id="imageArea" alignment="CENTER" styleClass="bg-transparent"
+                    StackPane.alignment="CENTER">
+                    <children>
+                        <ImageView fx:id="imageView" fitHeight="200.0" fitWidth="200.0"
+                            onMousePressed="#onMousePressedOnImageView"
+                            onMouseReleased="#onMouseReleasedOnImageView" pickOnBounds="true"
+                            preserveRatio="true" />
+                        <Label fx:id="labelNoImages"
+                            text="No images found for configured folder path!" />
+                    </children>
+                </VBox>
+                <HBox maxHeight="-Infinity" prefHeight="30.0" prefWidth="400.0" spacing="10.0"
+                    styleClass="bg-transparent" StackPane.alignment="TOP_CENTER">
+                    <children>
+                        <HBox fx:id="dragBar" alignment="CENTER"
+                            onMouseDragged="#onMouseDraggedEventForDragBar"
+                            onMousePressed="#onMousePressedEventForDragBar"
+                            onMouseReleased="#onMouseReleasedEventForDragBar" styleClass="drag-area"
+                            HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label fx:id="dragBarText" text="\\uf0b2">
+                                    <styleClass>
+                                        <String fx:value="fontAwesome" />
+                                        <String fx:value="text-normal" />
+                                    </styleClass>
+                                </Label>
+                            </children>
+                            <cursor>
+                                <Cursor fx:constant="MOVE" />
+                            </cursor>
+                        </HBox>
+                        <Button fx:id="buttonSettings" mnemonicParsing="false"
+                            onAction="#onActionButtonSettings" text="SETTINGS" />
+                        <Button fx:id="buttonClose" mnemonicParsing="false"
+                            onAction="#onActionButtonClose" text="CLOSE" />
+                    </children>
+                </HBox>
+                <Label fx:id="labelFileName" styleClass="text-normal" text="-"
+                    StackPane.alignment="BOTTOM_RIGHT" />
+                <Label fx:id="labelCounter" text="+" StackPane.alignment="BOTTOM_LEFT">
+                    <styleClass>
+                        <String fx:value="text-small" />
+                        <String fx:value="text-normal" />
+                    </styleClass>
+                </Label>
+            </children>
+            <opaqueInsets>
+                <Insets bottom="15.0" right="15.0" />
+            </opaqueInsets>
+            <effect>
+                <DropShadow color="#0000007f" offsetX="10.0" offsetY="10.0" />
+            </effect>
+        </StackPane>
+    </children>
+    <opaqueInsets>
+        <Insets />
+    </opaqueInsets>
+    <padding>
+        <Insets bottom="20.0" right="20.0" />
+    </padding>
 </Pane>
