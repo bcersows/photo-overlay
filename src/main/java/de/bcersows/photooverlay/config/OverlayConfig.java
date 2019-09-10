@@ -41,9 +41,11 @@ public class OverlayConfig {
 
     /** The application config. **/
     private final Properties config = new Properties();
+    /** The manager which handles the folder monitoring. **/
+    private final WatchServiceManager watchServiceManager;
 
     public OverlayConfig() {
-        // nothing
+        this.watchServiceManager = new WatchServiceManager();
     }
 
     /** Load the config. **/
@@ -88,14 +90,14 @@ public class OverlayConfig {
         if (!folderPaths.isEmpty()) {
             this.photos.addAll(FileHelper.findImages(folderPaths));
             try {
-                FileHelper.startFolderMonitoring(folderPaths, this::monitorFolderChangesConsumer);
+                this.watchServiceManager.startFolderMonitoring(folderPaths, this::monitorFolderChangesConsumer);
             } catch (final IOException e) {
                 LOG.error("Could not start folder monitoring.", e);
             }
         } else {
             LOG.warn("No folder(s) given.");
             try {
-                FileHelper.stopFolderMonitoring();
+                this.watchServiceManager.stopFolderMonitoring();
             } catch (final IOException e) {
                 LOG.error("Could not stop folder monitoring.", e);
             }
